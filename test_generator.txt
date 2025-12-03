@@ -1,0 +1,134 @@
+Loading table from examples/emea_order_line.csv...
+✓ Loaded 1000 rows, 44 columns
+Profiling table...
+✓ Profile written to emea_order_line_profile.json
+Detecting anomalies...
+✓ Found 17 potential issues
+Generating test suggestions...
+✓ Generated 48 test suggestions
+Generating dbt tests YAML...
+✓ Tests written to tests/emea_order_line_tests.yml
+
+================================================================================
+
+╭────────────────────────────────── 📊 Table Summary ──────────────────────────────────╮
+│ Table Name:    emea_order_line                                                       │
+│ Row Count:     1,000                                                                 │
+│ Column Count:  44                                                                    │
+╰──────────────────────────────────────────────────────────────────────────────────────╯
+
+                                   ⚠️  Detected Issues                                   
+┏━━━━━━━━━━┳━━━━━━━━━━━━━━━━━━━━━━━━━━━━┳━━━━━━━━━━━━━━━━━┳━━━━━━━━━━━━━━━━━━━━━━━━━━━━┓
+┃ Severity ┃ Column                     ┃ Issue Type      ┃ Details                    ┃
+┡━━━━━━━━━━╇━━━━━━━━━━━━━━━━━━━━━━━━━━━━╇━━━━━━━━━━━━━━━━━╇━━━━━━━━━━━━━━━━━━━━━━━━━━━━┩
+│ ERROR    │ company_id                 │ non_unique_id   │ ID column is only 0.1%     │
+│          │                            │                 │ unique (expected 100%)     │
+│ ERROR    │ order_id                   │ non_unique_id   │ ID column is only 98.4%    │
+│          │                            │                 │ unique (expected 100%)     │
+│ ERROR    │ sold_to_id                 │ non_unique_id   │ ID column is only 29.7%    │
+│          │                            │                 │ unique (expected 100%)     │
+│ ERROR    │ ship_to_id                 │ non_unique_id   │ ID column is only 29.7%    │
+│          │                            │                 │ unique (expected 100%)     │
+│ ERROR    │ material_id                │ non_unique_id   │ ID column is only 3.5%     │
+│          │                            │                 │ unique (expected 100%)     │
+│ ERROR    │ order_cycle_id             │ non_unique_id   │ ID column is only 99.1%    │
+│          │                            │                 │ unique (expected 100%)     │
+│ WARNING  │ secondary_account_manager  │ high_null_rate  │ Column has 92.6% null      │
+│          │                            │                 │ values (threshold: 30.0%)  │
+│ WARNING  │ quantity                   │ negative_values │ Column contains negative   │
+│          │                            │                 │ values (min: -2000.0) but  │
+│          │                            │                 │ appears to be an           │
+│          │                            │                 │ amount/count field         │
+│ INFO     │ company_id                 │ constant_column │ Column has only 1 distinct │
+│          │                            │                 │ value(s)                   │
+│ INFO     │ plant                      │ constant_column │ Column has only 1 distinct │
+│          │                            │                 │ value(s)                   │
+│ INFO     │ quantity_unit              │ constant_column │ Column has only 1 distinct │
+│          │                            │                 │ value(s)                   │
+│ INFO     │ local_currency             │ constant_column │ Column has only 1 distinct │
+│          │                            │                 │ value(s)                   │
+│ INFO     │ contribution_margin        │ constant_column │ Column has only 1 distinct │
+│          │                            │                 │ value(s)                   │
+│ INFO     │ contribution_margin_local  │ constant_column │ Column has only 1 distinct │
+│          │                            │                 │ value(s)                   │
+│ INFO     │ contribution_margin_perce… │ constant_column │ Column has only 1 distinct │
+│          │                            │                 │ value(s)                   │
+│ INFO     │ contribution_margin_bench… │ constant_column │ Column has only 1 distinct │
+│          │                            │                 │ value(s)                   │
+│ INFO     │ region                     │ constant_column │ Column has only 1 distinct │
+│          │                            │                 │ value(s)                   │
+└──────────┴────────────────────────────┴─────────────────┴────────────────────────────┘
+
+╭───────────────────────────────── ✅ Suggested Tests ─────────────────────────────────╮
+│ Total Tests:    48                                                                   │
+│ Description:    Rule-based test suggestions (LLM unavailable)                        │
+│                                                                                      │
+│ Tests by Type:                                                                       │
+│   • not_null:   42                                                                   │
+│   • unique:     6                                                                    │
+╰──────────────────────────────────────────────────────────────────────────────────────╯
+
+╭────────────────────────────────── 📁 Output Files ───────────────────────────────────╮
+│ Profile JSON:  emea_order_line_profile.json                                          │
+│ Tests YAML:    tests/emea_order_line_tests.yml                                       │
+╰──────────────────────────────────────────────────────────────────────────────────────╯
+Loading table from examples/emea_order_line.csv...
+✓ Loaded 1000 rows, 44 columns
+Profiling table...
+✓ Profile written to emea_order_line_profile.json
+Detecting anomalies...
+✓ Found 17 potential issues
+Generating test suggestions...
+✓ Generated 10 test suggestions
+Generating dbt tests YAML...
+✓ Tests written to tests/emea_order_line_tests.yml
+
+================================================================================
+
+╭────────────────────────────────────────────────────── 📊 Table Summary ───────────────────────────────────────────────────────╮
+│ Table Name:    emea_order_line                                                                                                │
+│ Row Count:     1,000                                                                                                          │
+│ Column Count:  44                                                                                                             │
+╰───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────╯
+
+                                                       ⚠️  Detected Issues                                                        
+┏━━━━━━━━━━┳━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┳━━━━━━━━━━━━━━━━━┳━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┓
+┃ Severity ┃ Column                         ┃ Issue Type      ┃ Details                                                         ┃
+┡━━━━━━━━━━╇━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━╇━━━━━━━━━━━━━━━━━╇━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┩
+│ ERROR    │ company_id                     │ non_unique_id   │ ID column is only 0.1% unique (expected 100%)                   │
+│ ERROR    │ order_id                       │ non_unique_id   │ ID column is only 98.4% unique (expected 100%)                  │
+│ ERROR    │ sold_to_id                     │ non_unique_id   │ ID column is only 29.7% unique (expected 100%)                  │
+│ ERROR    │ ship_to_id                     │ non_unique_id   │ ID column is only 29.7% unique (expected 100%)                  │
+│ ERROR    │ material_id                    │ non_unique_id   │ ID column is only 3.5% unique (expected 100%)                   │
+│ ERROR    │ order_cycle_id                 │ non_unique_id   │ ID column is only 99.1% unique (expected 100%)                  │
+│ WARNING  │ secondary_account_manager      │ high_null_rate  │ Column has 92.6% null values (threshold: 30.0%)                 │
+│ WARNING  │ quantity                       │ negative_values │ Column contains negative values (min: -2000.0) but appears to   │
+│          │                                │                 │ be an amount/count field                                        │
+│ INFO     │ company_id                     │ constant_column │ Column has only 1 distinct value(s)                             │
+│ INFO     │ plant                          │ constant_column │ Column has only 1 distinct value(s)                             │
+│ INFO     │ quantity_unit                  │ constant_column │ Column has only 1 distinct value(s)                             │
+│ INFO     │ local_currency                 │ constant_column │ Column has only 1 distinct value(s)                             │
+│ INFO     │ contribution_margin            │ constant_column │ Column has only 1 distinct value(s)                             │
+│ INFO     │ contribution_margin_local      │ constant_column │ Column has only 1 distinct value(s)                             │
+│ INFO     │ contribution_margin_percentage │ constant_column │ Column has only 1 distinct value(s)                             │
+│ INFO     │ contribution_margin_benchmark  │ constant_column │ Column has only 1 distinct value(s)                             │
+│ INFO     │ region                         │ constant_column │ Column has only 1 distinct value(s)                             │
+└──────────┴────────────────────────────────┴─────────────────┴─────────────────────────────────────────────────────────────────┘
+
+╭───────────────────────────────────────────────────── ✅ Suggested Tests ──────────────────────────────────────────────────────╮
+│ Total Tests:                             10                                                                                   │
+│ Description:                             Testing strategy for the emea_order_line table focuses on ensuring uniqueness for ID │
+│                                          columns, handling high null rates, and validating numeric columns for negative       │
+│                                          values. Additional tests are included for constant columns to ensure data            │
+│                                          variability.                                                                         │
+│                                                                                                                               │
+│ Tests by Type:                                                                                                                │
+│   • expect_column_values_to_be_between:  1                                                                                    │
+│   • not_null:                            3                                                                                    │
+│   • unique:                              6                                                                                    │
+╰───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────╯
+
+╭─────────────────────────────────────────────────────── 📁 Output Files ───────────────────────────────────────────────────────╮
+│ Profile JSON:  emea_order_line_profile.json                                                                                   │
+│ Tests YAML:    tests/emea_order_line_tests.yml                                                                                │
+╰───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────╯
