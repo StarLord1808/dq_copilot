@@ -1,0 +1,144 @@
+================================================================================
+                         DATA QUALITY COPILOT (DQ-COPILOT)
+              An LLM-Powered Multi-Agent System for Automated Data Quality
+================================================================================
+
+PROJECT OVERVIEW
+--------------------------------------------------------------------------------
+DQ-Copilot is an intelligent command-line AI assistant that leverages Large 
+Language Models (LLMs) and a multi-agent architecture to automate data quality 
+assessment, anomaly detection, and test generation for analytics pipelines.
+
+The system transforms manual, error-prone data validation into an automated, 
+AI-driven workflow that generates actionable insights and production-ready 
+dbt-style test configurations.
+
+
+CORE TECHNOLOGY STACK
+--------------------------------------------------------------------------------
+• LLM Integration: OpenAI GPT-4o-mini with structured JSON output
+• Prompt Engineering: Domain-specific system prompts with few-shot guidance
+• Agent Framework: Modular multi-agent orchestration pattern
+• Output Format: dbt-compatible YAML test specifications
+• Inference Mode: API-based with graceful rule-based fallback
+
+
+MULTI-AGENT ARCHITECTURE
+--------------------------------------------------------------------------------
+The system employs a specialized agent-based design where each agent handles 
+a discrete responsibility in the data quality pipeline:
+
+┌─────────────────────────────────────────────────────────────────────────────┐
+│                              ORCHESTRATION LAYER                            │
+│                                   (CLI)                                     │
+└─────────────────────────────────────────────────────────────────────────────┘
+                                      │
+        ┌─────────────────────────────┼─────────────────────────────┐
+        │                             │                             │
+        ▼                             ▼                             ▼
+┌───────────────┐           ┌───────────────┐           ┌───────────────┐
+│ TableLoader   │           │   Profiler    │           │   Anomaly     │
+│    Agent      │──────────▶│    Agent      │──────────▶│   Detector    │
+│               │           │               │           │    Agent      │
+│ • CSV/Parquet │           │ • Statistics  │           │ • LLM-powered │
+│ • Encoding    │           │ • Null rates  │           │ • Heuristics  │
+│ • Schema      │           │ • Cardinality │           │ • Severity    │
+└───────────────┘           └───────────────┘           └───────────────┘
+                                                                │
+                                      ┌─────────────────────────┘
+                                      │
+                                      ▼
+                            ┌───────────────┐           ┌───────────────┐
+                            │     Test      │           │    Report     │
+                            │  Generator    │──────────▶│   Renderer    │
+                            │    Agent      │           │    Agent      │
+                            │               │           │               │
+                            │ • LLM prompts │           │ • Rich CLI    │
+                            │ • dbt tests   │           │ • Summaries   │
+                            │ • YAML output │           │ • Priorities  │
+                            └───────────────┘           └───────────────┘
+
+
+AGENT FUNCTIONALITY BREAKDOWN
+--------------------------------------------------------------------------------
+
+1. TABLE LOADER AGENT
+   - Ingests multiple file formats (CSV, Parquet, JSON)
+   - Handles encoding detection and schema inference
+   - Provides clean DataFrame abstraction for downstream agents
+
+2. PROFILER AGENT
+   - Computes column-level statistics (min, max, mean, std)
+   - Calculates null percentages and cardinality metrics
+   - Generates distinct value counts and data type distributions
+   - Outputs structured JSON profile for LLM consumption
+
+3. ANOMALY DETECTOR AGENT (LLM-Powered)
+   - Uses GPT-4o-mini with custom system prompts
+   - Detects: High null rates, non-unique IDs, constant columns, 
+     negative values in amount fields, suspicious distributions
+   - Returns structured JSON with severity, priority, justification,
+     impact description, and action recommendations
+   - Graceful fallback to rule-based detection when API unavailable
+
+4. TEST GENERATOR AGENT (LLM-Powered)
+   - Transforms detected issues into dbt-compatible test specifications
+   - Supports test types: not_null, unique, accepted_values, 
+     relationships, expect_column_values_to_be_between, regex matching
+   - Validates LLM output against schema constraints
+   - Generates production-ready YAML configurations
+
+5. REPORT RENDERER AGENT
+   - Rich terminal output with color-coded severity indicators
+   - Priority-based issue sorting (CRITICAL → LOW)
+   - Actionable remediation guidance
+
+
+LLM TECHNIQUES EMPLOYED
+--------------------------------------------------------------------------------
+• Structured Output: JSON mode for deterministic, parseable responses
+• System Prompt Engineering: Domain-specific context and response templates
+• Temperature Control: Low temperature (0.1-0.3) for consistent analysis
+• Guardrails: Schema validation filters for LLM-generated test configs
+• Graceful Degradation: Automatic fallback to rule-based logic on API failure
+• Context Injection: Dynamic prompt construction from profiling metadata
+
+
+KEY DIFFERENTIATORS
+--------------------------------------------------------------------------------
+✓ Zero-Config Automation: Profiles tables and suggests tests without manual rules
+✓ LLM + Heuristics Hybrid: Combines AI intelligence with deterministic logic
+✓ Production-Ready Output: Generates dbt-compatible YAML for immediate CI/CD use
+✓ Explainable AI: Every issue includes justification, impact, and recommendations
+✓ Extensible Architecture: Plugin-ready agent framework for custom detectors
+✓ Offline Capable: Rule-based fallback ensures functionality without API access
+
+
+SAMPLE OUTPUT CAPABILITIES
+--------------------------------------------------------------------------------
+• Data Quality Reports with prioritized issue lists
+• Severity classifications: CRITICAL, HIGH, MEDIUM, LOW
+• Column-specific anomaly explanations
+• Auto-generated dbt test YAML files
+• Actionable remediation recommendations
+
+
+USE CASES
+--------------------------------------------------------------------------------
+→ Analytics Teams: Automate data validation before dashboard deployment
+→ Data Engineers: Generate dbt tests for new tables in seconds
+→ ML Engineers: Validate training data quality pre-model training
+→ Data Governance: Continuous monitoring and documentation of data health
+
+
+FUTURE ROADMAP
+--------------------------------------------------------------------------------
+• AirLLM Integration: Local LLM inference for privacy-sensitive data
+• Multi-table Relationship Analysis: Cross-table anomaly detection
+• Historical Trend Detection: Time-series data quality monitoring
+• CI/CD Integration: GitHub Actions / GitLab CI plugin
+
+
+================================================================================
+                    Built with Python • OpenAI • Pandas • Rich
+================================================================================
