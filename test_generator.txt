@@ -3,132 +3,110 @@ Loading table from examples/emea_order_line.csv...
 Profiling table...
 ✓ Profile written to emea_order_line_profile.json
 Detecting anomalies...
-✓ Found 17 potential issues
+Using OpenAI API for anomaly detection
+✓ Found 6 potential issues
 Generating test suggestions...
-✓ Generated 48 test suggestions
+Using OpenAI API for test generation
+✓ Generated 8 test suggestions
 Generating dbt tests YAML...
 ✓ Tests written to tests/emea_order_line_tests.yml
 
 ================================================================================
 
-╭────────────────────────────────── 📊 Table Summary ──────────────────────────────────╮
-│ Table Name:    emea_order_line                                                       │
-│ Row Count:     1,000                                                                 │
-│ Column Count:  44                                                                    │
-╰──────────────────────────────────────────────────────────────────────────────────────╯
+╭─────────────────────────────────────────────────── 📊 Table Summary ───────────────────────────────────────────────────╮
+│ Table Name:    emea_order_line                                                                                         │
+│ Row Count:     1,000                                                                                                   │
+│ Column Count:  44                                                                                                      │
+│ Health Score:  9.7/10                                                                                                  │
+╰────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────╯
 
-                                   ⚠️  Detected Issues                                   
-┏━━━━━━━━━━┳━━━━━━━━━━━━━━━━━━━━━━━━━━━━┳━━━━━━━━━━━━━━━━━┳━━━━━━━━━━━━━━━━━━━━━━━━━━━━┓
-┃ Severity ┃ Column                     ┃ Issue Type      ┃ Details                    ┃
-┡━━━━━━━━━━╇━━━━━━━━━━━━━━━━━━━━━━━━━━━━╇━━━━━━━━━━━━━━━━━╇━━━━━━━━━━━━━━━━━━━━━━━━━━━━┩
-│ ERROR    │ company_id                 │ non_unique_id   │ ID column is only 0.1%     │
-│          │                            │                 │ unique (expected 100%)     │
-│ ERROR    │ order_id                   │ non_unique_id   │ ID column is only 98.4%    │
-│          │                            │                 │ unique (expected 100%)     │
-│ ERROR    │ sold_to_id                 │ non_unique_id   │ ID column is only 29.7%    │
-│          │                            │                 │ unique (expected 100%)     │
-│ ERROR    │ ship_to_id                 │ non_unique_id   │ ID column is only 29.7%    │
-│          │                            │                 │ unique (expected 100%)     │
-│ ERROR    │ material_id                │ non_unique_id   │ ID column is only 3.5%     │
-│          │                            │                 │ unique (expected 100%)     │
-│ ERROR    │ order_cycle_id             │ non_unique_id   │ ID column is only 99.1%    │
-│          │                            │                 │ unique (expected 100%)     │
-│ WARNING  │ secondary_account_manager  │ high_null_rate  │ Column has 92.6% null      │
-│          │                            │                 │ values (threshold: 30.0%)  │
-│ WARNING  │ quantity                   │ negative_values │ Column contains negative   │
-│          │                            │                 │ values (min: -2000.0) but  │
-│          │                            │                 │ appears to be an           │
-│          │                            │                 │ amount/count field         │
-│ INFO     │ company_id                 │ constant_column │ Column has only 1 distinct │
-│          │                            │                 │ value(s)                   │
-│ INFO     │ plant                      │ constant_column │ Column has only 1 distinct │
-│          │                            │                 │ value(s)                   │
-│ INFO     │ quantity_unit              │ constant_column │ Column has only 1 distinct │
-│          │                            │                 │ value(s)                   │
-│ INFO     │ local_currency             │ constant_column │ Column has only 1 distinct │
-│          │                            │                 │ value(s)                   │
-│ INFO     │ contribution_margin        │ constant_column │ Column has only 1 distinct │
-│          │                            │                 │ value(s)                   │
-│ INFO     │ contribution_margin_local  │ constant_column │ Column has only 1 distinct │
-│          │                            │                 │ value(s)                   │
-│ INFO     │ contribution_margin_perce… │ constant_column │ Column has only 1 distinct │
-│          │                            │                 │ value(s)                   │
-│ INFO     │ contribution_margin_bench… │ constant_column │ Column has only 1 distinct │
-│          │                            │                 │ value(s)                   │
-│ INFO     │ region                     │ constant_column │ Column has only 1 distinct │
-│          │                            │                 │ value(s)                   │
-└──────────┴────────────────────────────┴─────────────────┴────────────────────────────┘
+╭────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────╮
+│ 🎯 Quick Assessment:  6 issues found                                                                                   │
+│    • HIGH:            3 important issues                                                                               │
+│    • MEDIUM:          3 warnings                                                                                       │
+╰────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────╯
 
-╭───────────────────────────────── ✅ Suggested Tests ─────────────────────────────────╮
-│ Total Tests:    48                                                                   │
-│ Description:    Rule-based test suggestions (LLM unavailable)                        │
-│                                                                                      │
-│ Tests by Type:                                                                       │
-│   • not_null:   42                                                                   │
-│   • unique:     6                                                                    │
-╰──────────────────────────────────────────────────────────────────────────────────────╯
+                                             ⚠️  Detected Issues (Prioritized)                                             
+┏━━━━━━━━━━━━┳━━━━━━━━━━━━━━━━━┳━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┳━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┓
+┃ Priority   ┃ Column          ┃ Issue & Impact                                            ┃ Action                      ┃
+┡━━━━━━━━━━━━╇━━━━━━━━━━━━━━━━━╇━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━╇━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┩
+│ HIGH       │ focus_industry  │ high_null_rate                                            │ Investigate the data        │
+│            │                 │ Column has 19.1% null values, which is high for an        │ collection process for      │
+│            │                 │ industry classification.                                  │ missing industry            │
+│            │                 │ Why: Industry classification should ideally be populated  │ classifications.            │
+│            │                 │ to ensure accurate reporting and analysis.                │                             │
+│            │                 │ Impact: High null rates may lead to incomplete insights   │                             │
+│            │                 │ and misinformed business decisions.                       │                             │
+│            │                 │ Ex: Null count: 191/1000 rows                             │                             │
+│ HIGH       │ quantity        │ negative_values                                           │ Review the data entry       │
+│            │                 │ Column contains negative values, with a minimum of        │ process to prevent negative │
+│            │                 │ -2000.0.                                                  │ quantities and correct      │
+│            │                 │ Why: Quantity should not be negative as it represents the │ existing records.           │
+│            │                 │ amount of items ordered.                                  │                             │
+│            │                 │ Impact: Negative quantities can lead to incorrect         │                             │
+│            │                 │ inventory and sales reporting.                            │                             │
+│            │                 │ Ex: Negative value found: -2000.0                         │                             │
+│ HIGH       │ revenue         │ negative_values                                           │ Investigate the source of   │
+│            │                 │ Column contains negative values, with a minimum of        │ negative revenue entries    │
+│            │                 │ -2572.64.                                                 │ and correct them.           │
+│            │                 │ Why: Revenue should not be negative as it represents      │                             │
+│            │                 │ income generated from sales.                              │                             │
+│            │                 │ Impact: Negative revenue can distort financial reporting  │                             │
+│            │                 │ and profitability analysis.                               │                             │
+│            │                 │ Ex: Negative value found: -2572.64                        │                             │
+│ MEDIUM     │ company_id      │ constant_column                                           │ Verify if the data is meant │
+│            │                 │ Column has only 1 distinct value, indicating no           │ to represent multiple       │
+│            │                 │ variability.                                              │ companies or if this is an  │
+│            │                 │ Why: The company_id should represent different companies; │ error in data collection.   │
+│            │                 │ having only one value suggests a lack of diversity in the │                             │
+│            │                 │ data.                                                     │                             │
+│            │                 │ Impact: This may lead to incorrect assumptions about the  │                             │
+│            │                 │ data's applicability across different companies.          │                             │
+│            │                 │ Ex: Distinct count: 1/1000 rows                           │                             │
+│ MEDIUM     │ order_status    │ constant_column                                           │ Review the status           │
+│            │                 │ Column has only 2 distinct values, indicating limited     │ definitions and ensure all  │
+│            │                 │ status tracking.                                          │ possible statuses are being │
+│            │                 │ Why: Order status typically has multiple states (e.g.,    │ captured.                   │
+│            │                 │ pending, completed, canceled) and should reflect the      │                             │
+│            │                 │ actual order lifecycle.                                   │                             │
+│            │                 │ Impact: Limited status options may hinder effective order │                             │
+│            │                 │ management and reporting.                                 │                             │
+│            │                 │ Ex: Distinct count: 2/1000 rows                           │                             │
+│ MEDIUM     │ contribution_m… │ constant_column                                           │ Review the calculation and  │
+│            │                 │ Column has only 1 distinct value (0.0), indicating no     │ data entry for contribution │
+│            │                 │ variability.                                              │ margin to ensure accuracy.  │
+│            │                 │ Why: Contribution margin should vary based on sales and   │                             │
+│            │                 │ costs; a constant value suggests data issues.             │                             │
+│            │                 │ Impact: A constant contribution margin may mislead        │                             │
+│            │                 │ financial analysis and decision-making.                   │                             │
+│            │                 │ Ex: Distinct count: 1/1000 rows                           │                             │
+└────────────┴─────────────────┴───────────────────────────────────────────────────────────┴─────────────────────────────┘
 
-╭────────────────────────────────── 📁 Output Files ───────────────────────────────────╮
-│ Profile JSON:  emea_order_line_profile.json                                          │
-│ Tests YAML:    tests/emea_order_line_tests.yml                                       │
-╰──────────────────────────────────────────────────────────────────────────────────────╯
-Loading table from examples/emea_order_line.csv...
-✓ Loaded 1000 rows, 44 columns
-Profiling table...
-✓ Profile written to emea_order_line_profile.json
-Detecting anomalies...
-✓ Found 17 potential issues
-Generating test suggestions...
-✓ Generated 10 test suggestions
-Generating dbt tests YAML...
-✓ Tests written to tests/emea_order_line_tests.yml
+╭────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────╮
+│ 🚀 Recommended Actions:                                                                                                │
+│    1.                    Investigate the data collection process for missing industry classifications. (Priority:      │
+│                          HIGH)                                                                                         │
+│    2.                    Review the data entry process to prevent negative quantities and correct existing records.    │
+│                          (Priority: HIGH)                                                                              │
+│    3.                    Investigate the source of negative revenue entries and correct them. (Priority: HIGH)         │
+│    4.                    Run the generated dbt tests to enforce quality rules                                          │
+│    5.                    Schedule a follow-up scan after data remediation                                              │
+╰────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────╯
 
-================================================================================
+╭────────────────────────────────────────────────── ✅ Suggested Tests ──────────────────────────────────────────────────╮
+│ Total Tests:                             8                                                                             │
+│ Description:                             This test strategy focuses on ensuring data integrity and quality for the     │
+│                                          emea_order_line table by addressing detected issues such as constant columns, │
+│                                          high null rates, and negative values in numeric fields.                       │
+│                                                                                                                        │
+│ Tests by Type:                                                                                                         │
+│   • accepted_values:                     2                                                                             │
+│   • expect_column_values_to_be_between:  2                                                                             │
+│   • not_null:                            3                                                                             │
+│   • unique:                              1                                                                             │
+╰────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────╯
 
-╭────────────────────────────────────────────────────── 📊 Table Summary ───────────────────────────────────────────────────────╮
-│ Table Name:    emea_order_line                                                                                                │
-│ Row Count:     1,000                                                                                                          │
-│ Column Count:  44                                                                                                             │
-╰───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────╯
-
-                                                       ⚠️  Detected Issues                                                        
-┏━━━━━━━━━━┳━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┳━━━━━━━━━━━━━━━━━┳━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┓
-┃ Severity ┃ Column                         ┃ Issue Type      ┃ Details                                                         ┃
-┡━━━━━━━━━━╇━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━╇━━━━━━━━━━━━━━━━━╇━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┩
-│ ERROR    │ company_id                     │ non_unique_id   │ ID column is only 0.1% unique (expected 100%)                   │
-│ ERROR    │ order_id                       │ non_unique_id   │ ID column is only 98.4% unique (expected 100%)                  │
-│ ERROR    │ sold_to_id                     │ non_unique_id   │ ID column is only 29.7% unique (expected 100%)                  │
-│ ERROR    │ ship_to_id                     │ non_unique_id   │ ID column is only 29.7% unique (expected 100%)                  │
-│ ERROR    │ material_id                    │ non_unique_id   │ ID column is only 3.5% unique (expected 100%)                   │
-│ ERROR    │ order_cycle_id                 │ non_unique_id   │ ID column is only 99.1% unique (expected 100%)                  │
-│ WARNING  │ secondary_account_manager      │ high_null_rate  │ Column has 92.6% null values (threshold: 30.0%)                 │
-│ WARNING  │ quantity                       │ negative_values │ Column contains negative values (min: -2000.0) but appears to   │
-│          │                                │                 │ be an amount/count field                                        │
-│ INFO     │ company_id                     │ constant_column │ Column has only 1 distinct value(s)                             │
-│ INFO     │ plant                          │ constant_column │ Column has only 1 distinct value(s)                             │
-│ INFO     │ quantity_unit                  │ constant_column │ Column has only 1 distinct value(s)                             │
-│ INFO     │ local_currency                 │ constant_column │ Column has only 1 distinct value(s)                             │
-│ INFO     │ contribution_margin            │ constant_column │ Column has only 1 distinct value(s)                             │
-│ INFO     │ contribution_margin_local      │ constant_column │ Column has only 1 distinct value(s)                             │
-│ INFO     │ contribution_margin_percentage │ constant_column │ Column has only 1 distinct value(s)                             │
-│ INFO     │ contribution_margin_benchmark  │ constant_column │ Column has only 1 distinct value(s)                             │
-│ INFO     │ region                         │ constant_column │ Column has only 1 distinct value(s)                             │
-└──────────┴────────────────────────────────┴─────────────────┴─────────────────────────────────────────────────────────────────┘
-
-╭───────────────────────────────────────────────────── ✅ Suggested Tests ──────────────────────────────────────────────────────╮
-│ Total Tests:                             10                                                                                   │
-│ Description:                             Testing strategy for the emea_order_line table focuses on ensuring uniqueness for ID │
-│                                          columns, handling high null rates, and validating numeric columns for negative       │
-│                                          values. Additional tests are included for constant columns to ensure data            │
-│                                          variability.                                                                         │
-│                                                                                                                               │
-│ Tests by Type:                                                                                                                │
-│   • expect_column_values_to_be_between:  1                                                                                    │
-│   • not_null:                            3                                                                                    │
-│   • unique:                              6                                                                                    │
-╰───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────╯
-
-╭─────────────────────────────────────────────────────── 📁 Output Files ───────────────────────────────────────────────────────╮
-│ Profile JSON:  emea_order_line_profile.json                                                                                   │
-│ Tests YAML:    tests/emea_order_line_tests.yml                                                                                │
-╰───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────╯
+╭─────────────────────────────────────────────────── 📁 Output Files ────────────────────────────────────────────────────╮
+│ Profile JSON:  emea_order_line_profile.json                                                                            │
+│ Tests YAML:    tests/emea_order_line_tests.yml                                                                         │
+╰────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────╯

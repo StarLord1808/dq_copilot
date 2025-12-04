@@ -32,8 +32,11 @@ Given a table profile, analyze the statistics and identify potential data qualit
       "column": "column_name",
       "issue_type": "high_null_rate",
       "severity": "warning",
+      "priority": "HIGH",
       "details": "Column has 45% null values, which is high for a 'status' column",
       "justification": "Status columns usually track the state of a record and should be populated for active tracking.",
+      "impact_description": "Incomplete status tracking may lead to dropped orders or reporting gaps.",
+      "action_recommendation": "Investigate upstream ingestion for missing status updates.",
       "example": "Null count: 450/1000 rows",
       "value": 0.45
     }
@@ -46,6 +49,8 @@ Given a table profile, analyze the statistics and identify potential data qualit
 3. ID columns should almost always be unique.
 4. Return an empty list if no significant anomalies are found.
 5. Provide a clear 'justification' for why this is an issue and an 'example' (e.g., specific value or stat).
+6. Assign a 'priority' (CRITICAL, HIGH, MEDIUM, LOW) based on potential business impact.
+7. Provide a specific 'action_recommendation' and 'impact_description'.
 """
     
     def __init__(
@@ -164,8 +169,11 @@ Given a table profile, analyze the statistics and identify potential data qualit
                     "column": col["name"],
                     "issue_type": "high_null_rate",
                     "severity": "warning",
+                    "priority": "HIGH",
                     "details": f"Column has {col['null_pct']:.1%} null values (threshold: {self.high_null_threshold:.1%})",
                     "justification": "High null rates can indicate missing data or broken ingestion pipelines.",
+                    "impact_description": "Missing data can lead to incomplete analysis and inaccurate reporting.",
+                    "action_recommendation": "Check upstream data sources for missing values or adjust null thresholds.",
                     "example": f"Null count: {int(col['null_pct'] * profile.get('row_count', 0))} rows",
                     "value": col["null_pct"],
                 })
@@ -177,8 +185,11 @@ Given a table profile, analyze the statistics and identify potential data qualit
                         "column": col["name"],
                         "issue_type": "non_unique_id",
                         "severity": "error",
+                        "priority": "CRITICAL",
                         "details": f"ID column is only {col['distinct_pct']:.1%} unique (expected 100%)",
                         "justification": "ID columns are expected to be unique identifiers for each row. Duplicates cause data integrity issues.",
+                        "impact_description": "Duplicate IDs can cause double-counting in aggregations and join explosions.",
+                        "action_recommendation": "Remove duplicates or investigate why the ID is not unique.",
                         "example": f"Unique count: {col['distinct_count']} vs Row count: {profile.get('row_count', 0)}",
                         "value": col["distinct_pct"],
                     })
@@ -189,8 +200,11 @@ Given a table profile, analyze the statistics and identify potential data qualit
                     "column": col["name"],
                     "issue_type": "constant_column",
                     "severity": "info",
+                    "priority": "LOW",
                     "details": f"Column has only {col['distinct_count']} distinct value(s)",
                     "justification": "Constant columns provide no information gain and might be redundant.",
+                    "impact_description": "Redundant columns waste storage and computation.",
+                    "action_recommendation": "Consider removing this column if it's not needed for filtering.",
                     "example": f"Distinct count: {col['distinct_count']}",
                     "value": col["distinct_count"],
                 })
@@ -202,8 +216,11 @@ Given a table profile, analyze the statistics and identify potential data qualit
                         "column": col["name"],
                         "issue_type": "negative_values",
                         "severity": "warning",
+                        "priority": "HIGH",
                         "details": f"Column contains negative values (min: {col['min']}) but appears to be an amount/count field",
                         "justification": "Amount and count fields are typically positive. Negative values might indicate data errors or returns.",
+                        "impact_description": "Negative values can skew totals and averages.",
+                        "action_recommendation": "Verify if negative values are expected (e.g., returns) or data errors.",
                         "example": f"Min value: {col['min']}",
                         "value": col["min"],
                     })

@@ -1,204 +1,148 @@
-# Data Quality Copilot CLI
+# Data Quality Copilot CLI 🤖✨
 
-A CLI AI agent that profiles tables, detects data quality issues, and generates dbt-style tests automatically.
+A command-line AI assistant that profiles tables, detects data quality issues, and auto-suggests dbt-style tests.
 
-## Problem Statement
+Think of it as a linting engine for your data — part spellchecker, part judgmental analyst, and slightly more useful than the average unsolicited LinkedIn advice.
 
-Data quality is critical for reliable analytics and ML pipelines. However, manually writing data quality tests is time-consuming and error-prone. This tool automates the process by:
+## Why This Exists 😫
 
-1. **Profiling** tables to understand their structure and statistics
-2. **Detecting** common data quality issues using rule-based heuristics
-3. **Generating** intelligent test suggestions using LLM
-4. **Outputting** dbt-compatible YAML test files
+Good analytics and ML depend on clean data. Unfortunately, writing data quality checks by hand ranks somewhere between watching paint dry and debugging CSV encodings as a hobby.
 
-## Architecture
+This tool automates the dreary bits by:
+
+- **Profiling** your tables (no more manual eyeballing CSVs)
+- **Detecting** anomalies using heuristics + an LLM assist
+- **Suggesting** actionable fixes instead of vague doom messages
+- **Generating** dbt-style tests automatically (yes, even the YAML)
+- **Outputting** everything neatly for copy-paste or CI runs
+
+## Architecture 🏗️
+
+This is more than a script — it's a tiny guild of specialized agents quietly judging your datasets.
 
 ```
 ┌─────────────┐
-│   CLI       │  Click-based command interface
+│   CLI       │  The Executive
 └──────┬──────┘
        │
-       ├──► TableLoaderAgent      (Load CSV/Parquet → DataFrame)
-       │
-       ├──► ProfilerAgent         (Compute column statistics)
-       │
-       ├──► AnomalyDetectorAgent  (Rule-based issue detection)
-       │
-       ├──► TestGeneratorAgent    (LLM-powered test suggestions)
-       │
-       ├──► YamlGenerator         (dbt YAML output)
-       │
-       └──► ReportRendererAgent   (Terminal report)
+       ├──► TableLoaderAgent
+       ├──► ProfilerAgent
+       ├──► AnomalyDetectorAgent
+       ├──► TestGeneratorAgent
+       ├──► YamlGenerator
+       └──► ReportRendererAgent
 ```
 
-### Agent Responsibilities
+### Agent Roles
 
-- **TableLoaderAgent**: Loads CSV and Parquet files with error handling
-- **ProfilerAgent**: Computes per-column stats (dtype, nulls, distinct count, min/max, examples)
-- **AnomalyDetectorAgent**: Detects 4 issue types:
-  - High null rate (>30%)
-  - Non-unique ID columns
-  - Constant columns (≤1 distinct value)
-  - Negative values in amount/count fields
-- **TestGeneratorAgent**: Uses OpenAI GPT-4 to suggest dbt tests (with rule-based fallback)
-- **YamlGenerator**: Transforms suggestions into dbt `version: 2` YAML
-- **ReportRendererAgent**: Rich terminal output with tables and colors
+- **TableLoaderAgent**: Eats CSV, Parquet, etc. Handles encodings without emotional breakdowns.
+- **ProfilerAgent**: Calculates stats, distributions, nulls, distinct counts — the accounting department.
+- **AnomalyDetectorAgent**: Sherlock Holmes for data messiness:
+  - Null swamps
+  - Duplicate IDs
+  - Boring constant columns
+  - Negative numbers pretending they belong
+- **TestGeneratorAgent**: Uses GPT to generate human-grade recommendations and dbt tests.
+- **ReportRendererAgent**: Pretty terminal output because aesthetics matter.
 
-## Installation
+## Setup 🛠️
+
+### Prerequisites
+
+- Python 3.8+
+- OpenAI API Key (recommended unless you love rule engines)
+- Coffee ☕ (optional but statistically correlated with productivity)
+
+### Installation
 
 ```bash
 cd /home/jiraiya/codebase/ai-agent/dq-copilot
+python3 -m venv venv
+source venv/bin/activate
 pip install -e .
+export OPENAI_API_KEY="your-key-here"
 ```
 
-## Usage
+## Usage 🚀
 
-### Profile Command (No LLM Required)
-
-Profile a table and generate statistics only:
+### Profile Mode — Stats Only
 
 ```bash
 dq-copilot profile --table-path examples/orders.csv --table-name orders
 ```
 
-**Output:**
-- `orders_profile.json` - Detailed column statistics
+**Produces:** `orders_profile.json`
 
-### Run Command (Full Pipeline with LLM)
-
-Run the complete data quality analysis:
+### Full Run — Profiling + AI Insights + Tests
 
 ```bash
-export OPENAI_API_KEY="your-api-key-here"
 dq-copilot run --table-path examples/orders.csv --table-name orders
 ```
 
-**Output:**
-- `orders_profile.json` - Column statistics
-- `tests/orders_tests.yml` - dbt test file
+**Outputs:**
+- `orders_profile.json`
+- `tests/orders_tests.yml`
 
-### Options
-
-```
---table-path PATH    Path to CSV or Parquet file (required)
---table-name NAME    Table name for metadata (required)
---output-dir DIR     Output directory (default: current directory)
---api-key KEY        OpenAI API key (or set OPENAI_API_KEY env var)
-```
-
-## Example Demo
-
-The included `examples/orders.csv` dataset contains intentional anomalies:
-
-| Anomaly Type | Column | Issue |
-|--------------|--------|-------|
-| Non-unique ID | `order_id` | Duplicate value 1001 |
-| High null rate | `customer_name` | 40% null values |
-| Constant column | `status` | All values are "pending" |
-| Negative values | `amount` | Contains -50.00 and -25.00 |
-
-**Run the demo:**
-
-```bash
-cd /home/jiraiya/codebase/ai-agent/dq-copilot
-dq-copilot run --table-path examples/orders.csv --table-name orders
-```
-
-**Expected output:**
+### Flags
 
 ```
-Loading table from examples/orders.csv...
-✓ Loaded 20 rows, 6 columns
-Profiling table...
-✓ Profile written to orders_profile.json
-Detecting anomalies...
-✓ Found 4 potential issues
-Generating test suggestions...
-✓ Generated 6 test suggestions
-Generating dbt tests YAML...
-✓ Tests written to tests/orders_tests.yml
-
-================================================================================
-
-┌─ 📊 Table Summary ─────────────────────────────────────────────────────────┐
-│ Table Name:    orders                                                      │
-│ Row Count:     20                                                          │
-│ Column Count:  6                                                           │
-└────────────────────────────────────────────────────────────────────────────┘
-
-⚠️  Detected Issues
-┌──────────┬───────────────┬──────────────────┬─────────────────────────────┐
-│ Severity │ Column        │ Issue Type       │ Details                     │
-├──────────┼───────────────┼──────────────────┼─────────────────────────────┤
-│ ERROR    │ order_id      │ non_unique_id    │ ID column is only 95.0%...  │
-│ WARNING  │ customer_name │ high_null_rate   │ Column has 40.0% null...    │
-│ WARNING  │ amount        │ negative_values  │ Contains negative values... │
-│ INFO     │ status        │ constant_column  │ Column has only 1 distinct..│
-└──────────┴───────────────┴──────────────────┴─────────────────────────────┘
-
-┌─ ✅ Suggested Tests ───────────────────────────────────────────────────────┐
-│ Total Tests:  6                                                            │
-│ Description:  LLM-generated test suggestions                               │
-│                                                                            │
-│ Tests by Type:                                                             │
-│   • not_null:                                3                             │
-│   • unique:                                  1                             │
-│   • expect_column_values_to_be_between:      2                             │
-└────────────────────────────────────────────────────────────────────────────┘
-
-┌─ 📁 Output Files ──────────────────────────────────────────────────────────┐
-│ Profile JSON:  orders_profile.json                                         │
-│ Tests YAML:    tests/orders_tests.yml                                      │
-└────────────────────────────────────────────────────────────────────────────┘
+--table-path PATH    File location
+--table-name NAME    Logical table name
+--output-dir DIR     Output destination
+--api-key KEY        LLM key
 ```
 
-## Configuration
+## Example Demo 🍿
 
-### LLM Provider
+A deliberately messy sample (`examples/orders.csv`) is available. Running the tool gives a structured output summarizing issues, priorities, suggested actions, and dbt tests — like a performance review, except useful.
 
-The tool uses OpenAI GPT-4 by default. Set your API key:
+**Example highlights:**
+- Unique ID failures flagged as **CRITICAL**
+- Null explosions flagged as **HIGH**
+- Negative values politely interrogated
 
-```bash
-export OPENAI_API_KEY="sk-..."
-```
+Reports include remediation steps and generated dbt tests (`not_null`, `unique`, ranges, etc.).
 
-If no API key is provided, the tool falls back to rule-based test generation (limited but functional).
+## Configuration ⚙️
 
-### Anomaly Detection Thresholds
+### LLM Integration
 
-Thresholds are configurable in the code:
+Defaults to OpenAI GPT-4. Without a key, the tool falls back to rule-based analysis — functional, but a bit rotary-phone-in-smartphone-world.
+
+### Thresholds
+
+Customizable heuristics:
 
 ```python
-detector = AnomalyDetectorAgent(
-    high_null_threshold=0.3,      # 30% null rate
-    constant_threshold=1,          # ≤1 distinct value
-    id_uniqueness_threshold=1.0    # 100% unique for IDs
+AnomalyDetectorAgent(
+    high_null_threshold=0.3,
+    constant_threshold=1,
+    id_uniqueness_threshold=1.0
 )
 ```
 
-## Dependencies
+## Dependencies 📦
 
-- `click` - CLI framework
-- `pandas` - Data manipulation
-- `pyarrow` - Parquet support
-- `openai` - LLM integration
-- `pyyaml` - YAML generation
-- `rich` - Terminal formatting
+- `click` — CLI framework
+- `pandas` — Data wrangler's Swiss army knife
+- `pyarrow` — Parquet support
+- `openai` — AI brainpower
+- `pyyaml` — dbt output whisperer
+- `rich` — Pretty output, because CLI doesn't have to be sad
 
-## Development
+## Development 💻
 
 ```bash
-# Install with dev dependencies
 pip install -e ".[dev]"
-
-# Run tests (if added)
 pytest
-
-# Format code
 black dq_copilot/
 ruff check dq_copilot/
 ```
 
-## License
+## License 📜
 
-MIT
+MIT — experiment, extend, or creatively destroy. Just don't blame us for philosophical crises induced by bad data.
+
+---
+
+*Built with caffeine, curiosity, and an unreasonable love for well-behaved datasets.*
